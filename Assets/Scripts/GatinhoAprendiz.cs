@@ -372,7 +372,7 @@ public class GatinhoAprendiz : MonoBehaviour
 
                         if (acertos >= 5 && explicacaoBoostingMostrada)
                         {
-                            if (!concluiu && PorcentagemAprendizado() >= 0.2f)
+                            if (!concluiu && PorcentagemAprendizado() >= 0.5f)
                             {
                                 explorando = false;
                                 objetoAtual = null;
