@@ -197,7 +197,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      pensamento_0: 5328842119825171009
+      pensamento_1: -5082835055956320522
+      pensamento_2: -5298920879524774111
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

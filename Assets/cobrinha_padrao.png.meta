@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      cobrinha_padrao_0: -4447788183961009086
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

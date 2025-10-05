@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      almofada_0: -5336610667361879239
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

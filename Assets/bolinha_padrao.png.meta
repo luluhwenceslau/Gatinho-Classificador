@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bolinha_padrao_0: -9037006891889989061
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

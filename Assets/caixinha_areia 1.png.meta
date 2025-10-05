@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      caixinha_areia 1_0: 2526829697637171451
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -372,7 +372,7 @@ public class GatinhoAprendiz : MonoBehaviour
 
                         if (acertos >= 5 && explicacaoBoostingMostrada)
                         {
-                            if (!concluiu && PorcentagemAprendizado() >= 0.5f)
+                            if (!concluiu && PorcentagemAprendizado() >= 0.2f)
                             {
                                 explorando = false;
                                 objetoAtual = null;
@@ -692,6 +692,12 @@ public class GatinhoAprendiz : MonoBehaviour
             return;
 
         explorando = false;
+        objetoAtual = null;
+
+        if (balaoPensamento != null)
+            balaoPensamento.SetActive(false);
+
+        StopAllCoroutines();
 
         popUpController.Mostrar(
             "Conclusão",
@@ -711,6 +717,12 @@ public class GatinhoAprendiz : MonoBehaviour
                     () =>
                     {
                         popUpController.Fechar();
+
+                        if (balaoPensamento != null)
+                            balaoPensamento.SetActive(false);
+
+                        explorando = false;
+                        StopAllCoroutines();
                     }
                 );
             }

@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      par_chinelos_0: 1675523047214092734
+      par_chinelos_1: 3725561723620541809
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

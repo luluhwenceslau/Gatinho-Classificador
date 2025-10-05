@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ratinho_padrao_0: -7506566336603020327
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

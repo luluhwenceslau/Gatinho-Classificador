@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ventilador_0: -7920822250991653403
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

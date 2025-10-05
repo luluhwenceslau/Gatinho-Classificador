@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      peteca_padrao_0: -584858079630131911
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

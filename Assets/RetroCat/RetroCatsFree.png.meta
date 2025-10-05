@@ -972,7 +972,41 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      RetroCatsFree_0: -3513057317577747854
+      RetroCatsFree_1: -257452214851007813
+      RetroCatsFree_10: 5943617886987436761
+      RetroCatsFree_11: -8072563733219040548
+      RetroCatsFree_12: -582779016733915179
+      RetroCatsFree_13: 7663328776049652936
+      RetroCatsFree_14: -1805783546388002624
+      RetroCatsFree_15: 4818059489773563552
+      RetroCatsFree_16: -4257782857245500747
+      RetroCatsFree_17: 4145682809804341258
+      RetroCatsFree_18: -4898827618775093411
+      RetroCatsFree_19: 9162416404151209717
+      RetroCatsFree_2: 148183108384984710
+      RetroCatsFree_20: 3341944901828079118
+      RetroCatsFree_21: -790707649625987976
+      RetroCatsFree_22: -1341020805189649248
+      RetroCatsFree_23: -5013348029207087494
+      RetroCatsFree_24: 7886210706918713977
+      RetroCatsFree_25: 8714344146856254220
+      RetroCatsFree_26: -7847950781208817348
+      RetroCatsFree_27: -7027294326915988025
+      RetroCatsFree_28: -5790358578401711450
+      RetroCatsFree_29: -1232591543157860750
+      RetroCatsFree_3: -7440523100793261235
+      RetroCatsFree_30: 1854935020090786876
+      RetroCatsFree_31: 5023261737801290226
+      RetroCatsFree_32: 3502842539200918625
+      RetroCatsFree_33: -2526682427006257968
+      RetroCatsFree_4: 8355702582816197484
+      RetroCatsFree_5: 2238565306757974126
+      RetroCatsFree_6: 5496264814403042477
+      RetroCatsFree_7: -9140735090286671063
+      RetroCatsFree_8: -5342742397969034934
+      RetroCatsFree_9: 8946715800184864353
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
