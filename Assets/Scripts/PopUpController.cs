@@ -1,6 +1,6 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class PopUpController : MonoBehaviour
 {
@@ -36,9 +36,14 @@ public class PopUpController : MonoBehaviour
         botao2.gameObject.SetActive(false);
     }
 
-    public void Mostrar(string titulo, string mensagem,
-                        string textoBotao1, System.Action acao1,
-                        string textoBotao2, System.Action acao2)
+    public void Mostrar(
+        string titulo,
+        string mensagem,
+        string textoBotao1,
+        System.Action acao1,
+        string textoBotao2,
+        System.Action acao2
+    )
     {
         painelPopUp.SetActive(true);
 

@@ -63,7 +63,7 @@ public class GatinhoAprendiz : MonoBehaviour
 
             popUpController.Mostrar(
                 "Bem-vindo ao Gatinho Classificador!<br>",
-                "Você deve mostrar 2 brinquedos de <b>cores diferentes</b> ao gatinho para que<br>ele aprenda a identificá-los.",
+                "Você deve mostrar dois brinquedos de <b>cores diferentes</b> ao gatinho para que ele aprenda a identificá-los!",
                 "Continuar",
                 () =>
                 {
@@ -94,22 +94,6 @@ public class GatinhoAprendiz : MonoBehaviour
 
         if (animator != null)
             animator.SetBool("explorando", explorando);
-
-        if (!mostrouAmostragem && PorcentagemAprendizado() >= 0.4f)
-        {
-            explorando = false;
-            objetoAtual = null;
-            mostrouAmostragem = true;
-            MostrarPopUpAmostragem();
-        }
-
-        if (!concluiu && PorcentagemAprendizado() >= 0.7f)
-        {
-            explorando = false;
-            objetoAtual = null;
-            concluiu = true;
-            MostrarPopUpConclusao();
-        }
     }
     #endregion
 
@@ -193,7 +177,7 @@ public class GatinhoAprendiz : MonoBehaviour
 
     private GameObject ProcurarObjetoProximo(Vector3 centro)
     {
-        Collider2D[] col = Physics2D.OverlapCircleAll(centro, 1.0f); 
+        Collider2D[] col = Physics2D.OverlapCircleAll(centro, 1.0f);
         GameObject maisProximo = null;
         float menorDistancia = Mathf.Infinity;
 
@@ -309,17 +293,19 @@ public class GatinhoAprendiz : MonoBehaviour
         Color cor = Color.clear;
         bool achouCor = false;
         string chaveNomeCor = null;
+        string nomeLimpo = NomeLimpo(obj.name);
 
         if (sr != null)
         {
             cor = sr.color;
             nomeCor = NomeDaCor(cor);
             achouCor = brinquedosAprendidos.Any(c => CoresSemelhantes(c, cor));
-            chaveNomeCor = obj.name + "_" + nomeCor;
+
+            chaveNomeCor = nomeLimpo + "_" + nomeCor;
         }
 
         bool negativeByName =
-            nomesNaoBrinquedos.Contains(obj.name) || objetosNegativos.Contains(chaveNomeCor);
+            nomesNaoBrinquedos.Contains(nomeLimpo) || objetosNegativos.Contains(chaveNomeCor);
 
         string prediction;
         if (achouCor && !negativeByName)
@@ -338,12 +324,12 @@ public class GatinhoAprendiz : MonoBehaviour
                 pensamento.text = $"Já vi brinquedos dessa cor ({nomeCor})...";
             yield return _waitForSeconds2;
             if (pensamento != null)
-                pensamento.text = $"Acredito que esse {obj.name} seja um brinquedo!";
+                pensamento.text = $"Acredito que '{nomeLimpo}' seja um brinquedo!";
         }
         else if (prediction == "unknown")
         {
             if (pensamento != null)
-                pensamento.text = $"Hmm... não conheço essa cor ({nomeCor}) no {obj.name}.";
+                pensamento.text = $"Hmm... não conheço essa cor ({nomeCor}) no {nomeLimpo}.";
             yield return _waitForSeconds2;
             if (pensamento != null)
                 pensamento.text = $"Acho que não é brinquedo!";
@@ -352,7 +338,7 @@ public class GatinhoAprendiz : MonoBehaviour
         {
             if (pensamento != null)
                 pensamento.text =
-                    $"Já vi algo parecido, mas o nome {obj.name} está marcado como <b>não</b> brinquedo.";
+                    $"Já vi algo parecido, mas o nome {nomeLimpo} está marcado como <b>não</b> brinquedo.";
             yield return _waitForSeconds2;
             if (pensamento != null)
                 pensamento.text = $"Acredito que não seja um brinquedo.";
@@ -371,7 +357,7 @@ public class GatinhoAprendiz : MonoBehaviour
             {
                 popUpController.Mostrar(
                     "Validação",
-                    $"O gatinho acha que {obj.name} é um brinquedo. Ele acertou?",
+                    $"O gatinho acha que {nomeLimpo} é um brinquedo. Ele acertou?",
                     "Sim",
                     () =>
                     {
@@ -382,6 +368,18 @@ public class GatinhoAprendiz : MonoBehaviour
                             explorando = false;
                             objetoAtual = null;
                             StartCoroutine(MostrarBoostingDepoisDoBalao());
+                        }
+
+                        if (acertos >= 5 && explicacaoBoostingMostrada)
+                        {
+                            if (!concluiu && PorcentagemAprendizado() >= 0.5f)
+                            {
+                                explorando = false;
+                                objetoAtual = null;
+                                concluiu = true;
+
+                                StartCoroutine(MostrarConclusãoDepoisDoBalao());
+                            }
                         }
                     },
                     "Não",
@@ -395,18 +393,18 @@ public class GatinhoAprendiz : MonoBehaviour
             {
                 popUpController.Mostrar(
                     "Validação",
-                    $"O gatinho não conhece a cor ({nomeCor}) do {obj.name}. Esse objeto é um brinquedo?",
+                    $"O gatinho não conhece a cor ({nomeCor}) do {nomeLimpo}. Esse objeto é um brinquedo?",
                     "Sim",
                     () =>
                     {
                         JogadorValidou(true);
-                        AprenderNovaCor(nomeCor, true, obj.name);
+                        AprenderNovaCor(nomeCor, true, nomeLimpo);
                     },
                     "Não",
                     () =>
                     {
                         JogadorValidou(true);
-                        AprenderNovaCor(nomeCor, false, obj.name);
+                        AprenderNovaCor(nomeCor, false, nomeLimpo);
                     }
                 );
             }
@@ -414,7 +412,7 @@ public class GatinhoAprendiz : MonoBehaviour
             {
                 popUpController.Mostrar(
                     "Validação",
-                    $"O gatinho acha que {obj.name} <b>não</b> é um brinquedo. Ele acertou?",
+                    $"O gatinho acha que {nomeLimpo} <b>não</b> é um brinquedo. Ele acertou?",
                     "Sim",
                     () =>
                     {
@@ -476,6 +474,7 @@ public class GatinhoAprendiz : MonoBehaviour
         SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
         string nomeCor = "cor indefinida";
         Color corObjeto = Color.clear;
+        string nomeLimpo = NomeLimpo(obj.name);
 
         if (sr != null)
         {
@@ -488,7 +487,7 @@ public class GatinhoAprendiz : MonoBehaviour
 
         if (pensamento != null)
             pensamento.text =
-                $"Entendi! Vou lembrar que o {obj.name} é um brinquedo de cor {nomeCor}.";
+                $"Entendi! Vou lembrar que '{nomeLimpo}' é um brinquedo de cor {nomeCor}.";
         yield return _waitForSeconds2;
 
         obj.GetComponent<DragDrop>().VoltarPosicaoInicial();
@@ -499,7 +498,7 @@ public class GatinhoAprendiz : MonoBehaviour
         {
             popUpController.Mostrar(
                 "Fase de Treinamento",
-                "O gatinho acabou de guardar sua primeira cor.<br>"
+                "O gatinho acabou de aprender a sua primeira cor! "
                     + "Ele está aprendendo de forma <b>supervisionada</b>.<br>"
                     + "Sempre que você mostrar um brinquedo, ele grava a cor "
                     + "para usar mais tarde e tentar reconhecer sozinho.<br>Mostre um brinquedo de outra cor para o gatinho",
@@ -515,33 +514,43 @@ public class GatinhoAprendiz : MonoBehaviour
         {
             popUpController.Mostrar(
                 "Fase de Treinamento",
-                "Perfeito! Agora o gatinho já conhece cores diferentes<br>"
-                    + "Quanto mais exemplos variados ele recebe, "
+                "Agora o gatinho já conhece duas cores diferentes!<br>"
+                    + "Quanto mais exemplos variados ele receber, "
                     + "mais fácil será para ele criar regras para identificar brinquedos sozinho.<br>"
                     + "Esse é o princípio dos algoritmos de classificação!",
                 "Próximo",
                 () =>
                 {
-                    popUpController.Fechar();
+                    popUpController.Mostrar(
+                        "Amostragem Limitada",
+                        "Aqui temos um cenário pequeno e alguns brinquedos! "
+                            + "É uma <b>amostragem limitada</b>: o aprendizado ocorre, "
+                            + "mas pode não ser tão preciso ou confiável. "
+                            + "Em aprendizado de máquina, quanto <b>maior e mais variado</b> "
+                            + "for o conjunto de exemplos(às vezes milhares ou até milhões!), "
+                            + "melhor será a capacidade do modelo de <b>generalizar</b> e acertar em novos casos.",
+                        "Entendi",
+                        () =>
+                        {
+                            popUpController.Mostrar(
+                                "Fase de Exploração",
+                                "Agora é a vez do gatinho explorar!<br>"
+                                    + "Ele vai usar as pistas que aprendeu (cores) para decidir "
+                                    + "se o objeto é brinquedo ou não. "
+                                    + "Isso é como uma <b>árvore de decisão</b> simples "
+                                    + "onde ele segue 'se a cor é conhecida, então é brinquedo'.",
+                                "Explorar",
+                                () =>
+                                {
+                                    popUpController.Fechar();
+                                    explorando = true;
+                                }
+                            );
+                        }
+                    );
                 }
             );
         }
-
-        if (brinquedosAprendidos.Count == 2)
-            popUpController.Mostrar(
-                "Fase de Exploração",
-                "Agora é a vez do gatinho explorar!<br>"
-                    + "Ele vai usar as pistas que aprendeu (cores) para decidir "
-                    + "se o objeto é brinquedo ou não. <br>"
-                    + "Isso é como uma <b>árvore de decisão</b> simples "
-                    + "onde ele segue 'se a cor é conhecida, então é brinquedo'",
-                "Explorar",
-                () =>
-                {
-                    popUpController.Fechar();
-                    explorando = true;
-                }
-            );
     }
     #endregion
 
@@ -559,6 +568,7 @@ public class GatinhoAprendiz : MonoBehaviour
         SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
         string nomeCor = "cor indefinida";
         Color cor = Color.clear;
+        string nomeLimpo = NomeLimpo(obj.name);
 
         if (sr != null)
         {
@@ -569,7 +579,7 @@ public class GatinhoAprendiz : MonoBehaviour
         if (!explicacaoExtraMostrada)
         {
             popUpController.Mostrar(
-                "Treinamento Extra",
+                "Refinando o Aprendizado",
                 "Ops! O gatinho errou.<br>"
                     + "Agora ele vai aprender que este objeto <b>não</b> é um brinquedo.<br>"
                     + "No aprendizado de máquina, isso é chamado de <b>exemplo negativo</b>.<br>"
@@ -586,14 +596,14 @@ public class GatinhoAprendiz : MonoBehaviour
                         "Entendi",
                         () =>
                         {
-                            string chaveNegativa = obj.name + "_" + nomeCor;
+                            string chaveNegativa = nomeLimpo + "_" + nomeCor;
                             objetosNegativos.Add(chaveNegativa);
 
                             if (balaoPensamento != null)
                                 balaoPensamento.SetActive(true);
                             if (pensamento != null)
                                 pensamento.text =
-                                    $"Vou lembrar que {obj.name} ({nomeCor}) <b>não</b> é um brinquedo.";
+                                    $"Vou lembrar que {nomeLimpo} ({nomeCor}) <b>não</b> é um brinquedo.";
 
                             StartCoroutine(EsconderBalaoEContinuar());
                             emTreinamentoExtra = false;
@@ -606,14 +616,14 @@ public class GatinhoAprendiz : MonoBehaviour
         }
         else
         {
-            string chaveNegativa = obj.name + "_" + nomeCor;
+            string chaveNegativa = nomeLimpo + "_" + nomeCor;
             objetosNegativos.Add(chaveNegativa);
 
             if (balaoPensamento != null)
                 balaoPensamento.SetActive(true);
             if (pensamento != null)
                 pensamento.text =
-                    $"Vou lembrar que {obj.name} ({nomeCor}) <b>não</b> é um brinquedo.";
+                    $"Vou lembrar que {nomeLimpo} ({nomeCor}) <b>não</b> é um brinquedo.";
 
             StartCoroutine(EsconderBalaoEContinuar());
             emTreinamentoExtra = false;
@@ -669,24 +679,11 @@ public class GatinhoAprendiz : MonoBehaviour
     }
     #endregion
 
-    private void MostrarPopUpAmostragem()
+    private IEnumerator MostrarConclusãoDepoisDoBalao()
     {
-        if (popUpController == null)
-            return;
+        yield return EsconderBalaoEContinuar();
 
-        popUpController.Mostrar(
-            "Amostragem Limitada",
-            "No jogo, o gatinho aprendeu com poucos exemplos, isso é uma <b>amostragem limitada</b>.<br>"
-                + "Mesmo assim, ele conseguiu melhorar, mas sua memória pode não ser perfeita.<br>"
-                + "Na prática, em aprendizado de máquina, precisamos de <b>muitos exemplos</b> "
-                + "(milhares ou até milhões!) para que o modelo seja realmente eficiente "
-                + "e consiga generalizar para novos casos.",
-            "Entendi",
-            () =>
-            {
-                explorando = true;
-            }
-        );
+        MostrarPopUpConclusao();
     }
 
     private void MostrarPopUpConclusao()
@@ -703,7 +700,20 @@ public class GatinhoAprendiz : MonoBehaviour
                 + "foi corrigindo seus erros e agora consegue prever melhor.<br>"
                 + "Isso é <b>aprendizado supervisionado</b> na prática!",
             "Concluir",
-            () => { }
+            () =>
+            {
+                popUpController.Mostrar(
+                    "Fim da Aventura!",
+                    "O gatinho aprendeu tudo o que podia por hoje!<br>"
+                        + "Com sua ajuda, ele agora reconhece brinquedos e evita confusões.<br>"
+                        + "Obrigado por jogar e por ensinar o pequeno felino!",
+                    "Encerrar",
+                    () =>
+                    {
+                        popUpController.Fechar();
+                    }
+                );
+            }
         );
     }
 
@@ -752,5 +762,17 @@ public class GatinhoAprendiz : MonoBehaviour
 
         return "Uma cor desconhecida";
     }
+
+    private string NomeLimpo(string nomeOriginal)
+    {
+        if (string.IsNullOrEmpty(nomeOriginal))
+            return "Objeto";
+
+        string[] partes = nomeOriginal.Split('_');
+
+        string nomeBase = partes[0];
+        return char.ToUpper(nomeBase[0]) + nomeBase[1..].ToLower();
+    }
+
     #endregion
 }
